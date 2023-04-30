@@ -5,14 +5,19 @@
 #include <filesystem>
 
 using namespace std;
-void readCSV(string filename);
+vector<string> *readCSV(filesystem::path path);
 vector<filesystem::path> findFilesFromDirectory(string directory, string extension);
+vector<string> splitString(string str, string delimiter = " ");
 
 int main()
 {
     try
     {
         vector<filesystem::path> csv_files = findFilesFromDirectory("examples_2/var1", ".csv");
+        vector<string> *lines = readCSV(csv_files[0]);
+        cout << lines[2][0];
+        delete[] lines;
+        // splitString("Czech Republic,908743,761324,625681", ",");
     }
     catch (const exception &e)
     {
@@ -43,15 +48,40 @@ vector<filesystem::path> findFilesFromDirectory(string directory, string extensi
     return csv_files;
 }
 
-void readCSV(string filename)
+vector<string> *readCSV(filesystem::path path)
 {
-    ifstream file(filename);
+    ifstream file(path);
     if (!file.is_open())
     {
-        throw invalid_argument("Filename " + filename + " not found");
+        throw invalid_argument("Filename " + path.filename().string() + " not found");
     }
     string line;
     getline(file, line);
-    cout << line;
+
+    const int numLines = stoi(line);
+
+    vector<string> *lines = new vector<string>[numLines];
+    for (int i = 0; i < numLines; i++)
+    {
+        getline(file, line);
+        lines[i] = splitString(line, ",");
+    }
+
     file.close();
+    return lines;
+    // delete[] lines;
+}
+
+vector<string> splitString(string str, string delimiter)
+{
+    vector<string> res;
+    size_t start = 0, end = 0;
+
+    while ((end = str.find(delimiter, start)) != string::npos)
+    {
+        res.push_back(str.substr(start, end - start));
+        start = end + delimiter.length();
+    }
+    res.push_back(str.substr(start));
+    return res;
 }
