@@ -6,36 +6,39 @@
 
 using namespace std;
 void readCSV(string filename);
-vector<filesystem::path> readFilesFromDirectory(string directory);
+vector<filesystem::path> findFilesFromDirectory(string directory, string extension);
 
 int main()
 {
     try
     {
-        vector<filesystem::path> csv_files = readFilesFromDirectory("examples_2/var1");
+        vector<filesystem::path> csv_files = findFilesFromDirectory("examples_2/var1", ".csv");
     }
     catch (const exception &e)
     {
-        std::cerr << e.what() << '\n';
+        cerr << e.what() << '\n';
     }
 
     return 0;
 }
 
-vector<filesystem::path> readFilesFromDirectory(string directory)
+vector<filesystem::path> findFilesFromDirectory(string directory, string extension)
 {
+    if (!filesystem::exists(directory))
+    {
+        throw invalid_argument("The directory " + directory + " doesn't exist.");
+    }
     vector<filesystem::path> csv_files;
     for (const auto &filename : filesystem::directory_iterator(directory))
     {
-        cout << filename.path().extension() << endl;
-        if (filename.path().extension() == ".csv")
+        if (filename.path().extension() == extension)
         {
             csv_files.push_back(filename.path());
         }
     }
     if (csv_files.empty())
     {
-        throw invalid_argument("The directory " + directory + " doesn't contain any csv files.");
+        throw invalid_argument("The directory " + directory + " doesn't contain any " + extension + " files.");
     }
     return csv_files;
 }
