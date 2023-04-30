@@ -3,21 +3,25 @@
 #include <string>
 #include <vector>
 #include <filesystem>
+#include "country.h"
+#include <sstream>
 
 using namespace std;
-vector<string> *readCSV(filesystem::path path);
+vector<vector<string>> readCSV(filesystem::path path);
 vector<filesystem::path> findFilesFromDirectory(string directory, string extension);
 vector<string> splitString(string str, string delimiter = " ");
+vector<Country> parseCountries(vector<vector<string>> csvLines);
 
 int main()
 {
     try
     {
         vector<filesystem::path> csv_files = findFilesFromDirectory("examples_2/var1", ".csv");
-        vector<string> *lines = readCSV(csv_files[0]);
-        cout << lines[2][0];
-        delete[] lines;
-        // splitString("Czech Republic,908743,761324,625681", ",");
+        vector<vector<string>> lines = readCSV(csv_files[0]);
+
+        vector<Country> countries = parseCountries(lines);
+
+        cout << countries[2].to_string() << endl;
     }
     catch (const exception &e)
     {
@@ -48,7 +52,7 @@ vector<filesystem::path> findFilesFromDirectory(string directory, string extensi
     return csv_files;
 }
 
-vector<string> *readCSV(filesystem::path path)
+vector<vector<string>> readCSV(filesystem::path path)
 {
     ifstream file(path);
     if (!file.is_open())
@@ -60,16 +64,15 @@ vector<string> *readCSV(filesystem::path path)
 
     const int numLines = stoi(line);
 
-    vector<string> *lines = new vector<string>[numLines];
+    vector<vector<string>> lines;
     for (int i = 0; i < numLines; i++)
     {
         getline(file, line);
-        lines[i] = splitString(line, ",");
+        lines.push_back(splitString(line, ","));
     }
 
     file.close();
     return lines;
-    // delete[] lines;
 }
 
 vector<string> splitString(string str, string delimiter)
@@ -84,4 +87,30 @@ vector<string> splitString(string str, string delimiter)
     }
     res.push_back(str.substr(start));
     return res;
+}
+
+vector<Country> parseCountries(vector<vector<string>> csvLines)
+{
+    vector<Country> countries;
+    for (auto &line : csvLines)
+    {
+        string countryName = line[0];
+        Country country(countryName);
+        for (size_t i = 1; i < line.size(); i++)
+        {
+            int value;
+            stringstream ss(line[i]);
+
+            if (ss >> value && ss.eof())
+            {
+                country.add_vote(value);
+            }
+            else
+            {
+                throw invalid_argument("Value " + line[i] + " in the line doesn't match the int value");
+            }
+        }
+        countries.push_back(country);
+    }
+    return countries;
 }

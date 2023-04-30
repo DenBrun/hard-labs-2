@@ -13,4 +13,5 @@ public:
     void add_vote(int score);
     int calculate_votes_sum();
     int get_votes_sum();
+    std::string to_string();
 };
