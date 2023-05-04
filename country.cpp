@@ -12,13 +12,12 @@ void Country::add_vote(int score)
 
 int Country::calculate_votes_sum()
 {
-    int sum = 0;
+    this->votes_sum = 0;
     for (const auto &i : this->votes)
     {
-        sum += i;
+        this->votes_sum += i;
     }
-    this->votes_sum = sum;
-    return sum;
+    return this->votes_sum;
 }
 
 int Country::get_votes_sum()
@@ -28,7 +27,7 @@ int Country::get_votes_sum()
 
 std::string Country::to_string()
 {
-    std::string result = name + ' ';
+    std::string result = name + " - " + std::to_string(votes_sum) + ". All votes: ";
     for (auto &i : votes)
     {
         result += std::to_string(i) + ' ';
