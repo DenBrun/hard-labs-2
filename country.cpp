@@ -20,6 +20,11 @@ int Country::get_vote(size_t column)
     return this->votes[column];
 }
 
+std::string Country::get_name()
+{
+    return this->name;
+}
+
 std::string Country::to_string()
 {
     std::string result = name + ' ';

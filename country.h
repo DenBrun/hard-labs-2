@@ -13,6 +13,7 @@ public:
     void add_vote(int score);
     void add_points(int value);
     int get_vote(size_t column);
+    std::string get_name();
     std::string to_string();
     int get_points();
 };

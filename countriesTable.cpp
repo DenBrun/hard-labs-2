@@ -1,5 +1,6 @@
 #include "countriesTable.h"
 #include <algorithm>
+#include <fstream>
 using namespace std;
 
 CountriesTable::CountriesTable(vector<Country> countries)
@@ -36,5 +37,26 @@ vector<Country> CountriesTable::calculate_winners()
     }
     sort(this->countries.begin(), this->countries.end(), [](Country &c1, Country &c2)
          { return c1.get_points() > c2.get_points(); });
-    return this->countries;
+    this->winners.insert(winners.begin(), this->countries.begin(), this->countries.begin() + 10);
+    return this->winners;
+}
+
+void CountriesTable::create_winners_csv()
+{
+    if (this->winners.size() == 0)
+    {
+        calculate_winners();
+    }
+
+    ofstream file("results.csv");
+    if (!file.is_open())
+    {
+        throw invalid_argument("Unable to generate output file");
+    }
+    for (auto &country : this->winners)
+    {
+
+        file << country.get_name() + "," + to_string(country.get_points()) << endl;
+    }
+    file.close();
 }

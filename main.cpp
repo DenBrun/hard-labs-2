@@ -1,7 +1,5 @@
 #include "CSVReader.h"
 #include <iostream>
-#include <fstream>
-#include <sstream>
 
 using namespace std;
 
@@ -11,11 +9,8 @@ int main()
     {
         CountryCSVReader countries_reader;
         CountriesTable table = countries_reader.readAndParseCountriesFromDirectory("examples_2/var1");
-        vector<Country> r = table.calculate_winners();
-        for (auto &c : r)
-        {
-            cout << c.get_points() << endl;
-        }
+        table.calculate_winners();
+        table.create_winners_csv();
     }
     catch (const exception &e)
     {
