@@ -19,7 +19,7 @@ int main()
         vector<Country> r = table.calculate_winners();
         for (auto &c : r)
         {
-            cout << c.to_string() << endl;
+            cout << c.get_points() << endl;
         }
     }
     catch (const exception &e)

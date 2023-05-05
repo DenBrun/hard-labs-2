@@ -5,7 +5,7 @@ class CountriesTable
 {
 private:
     std::vector<Country> countries;
-    std::vector<Country> sort_column(size_t n);
+    void sort_by_column(size_t n);
 
 public:
     CountriesTable(std::vector<Country> countries);
