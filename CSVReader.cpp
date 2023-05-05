@@ -89,7 +89,7 @@ vector<Country> CountryCSVReader::readAndParseCountries(filesystem::path path)
     return countries;
 }
 
-std::vector<Country> CountryCSVReader::readAndParseCountriesFromDirectory(std::string directory)
+CountriesTable CountryCSVReader::readAndParseCountriesFromDirectory(std::string directory)
 {
     vector<Country> countries;
     vector<filesystem::path> csv_files = this->findFilesFromDirectory(directory, ".csv");
@@ -98,5 +98,5 @@ std::vector<Country> CountryCSVReader::readAndParseCountriesFromDirectory(std::s
         vector<Country> new_file_countries = this->readAndParseCountries(file);
         countries.insert(countries.end(), new_file_countries.begin(), new_file_countries.end());
     }
-    return countries;
+    return CountriesTable(countries);
 }

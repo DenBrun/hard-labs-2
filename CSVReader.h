@@ -1,4 +1,4 @@
-#include "country.h"
+#include "countriesTable.h"
 #include <filesystem>
 
 class CSVReader
@@ -15,5 +15,5 @@ class CountryCSVReader : public CSVReader
 {
 public:
     std::vector<Country> readAndParseCountries(std::filesystem::path path);
-    std::vector<Country> readAndParseCountriesFromDirectory(std::string directory);
+    CountriesTable readAndParseCountriesFromDirectory(std::string directory);
 };

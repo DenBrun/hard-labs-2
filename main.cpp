@@ -10,9 +10,9 @@ int main()
     try
     {
         CountryCSVReader countries_reader;
-        vector<Country> countries = countries_reader.readAndParseCountriesFromDirectory("examples_2/var1");
-        cout << countries.size() << endl;
-        for (auto &country : countries)
+        CountriesTable table = countries_reader.readAndParseCountriesFromDirectory("examples_2/var1");
+        cout << table.size() << endl;
+        for (auto &country : table.get_countries())
         {
             cout << country.to_string() << endl;
         }
