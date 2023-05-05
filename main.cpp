@@ -11,11 +11,6 @@ int main()
     {
         CountryCSVReader countries_reader;
         CountriesTable table = countries_reader.readAndParseCountriesFromDirectory("examples_2/var1");
-        // cout << table.size() << endl;
-        // for (auto &country : table.get_countries())
-        // {
-        //     cout << country.to_string() << endl;
-        // }
         vector<Country> r = table.calculate_winners();
         for (auto &c : r)
         {
