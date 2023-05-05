@@ -83,7 +83,6 @@ vector<Country> CountryCSVReader::readAndParseCountries(filesystem::path path)
                 throw invalid_argument("Value " + line[i] + " in the line doesn't match the int value");
             }
         }
-        country.calculate_votes_sum();
         countries.push_back(country);
     }
     return countries;
