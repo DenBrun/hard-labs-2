@@ -6,6 +6,8 @@ using namespace std;
 CountriesTable::CountriesTable(vector<Country> countries)
 {
     this->countries = countries;
+    this->columns = countries[0].get_columns();
+    this->rows = countries.size();
 }
 
 void CountriesTable::sort_by_column(size_t n)
@@ -14,9 +16,14 @@ void CountriesTable::sort_by_column(size_t n)
          { return c1.get_vote(n) > c2.get_vote(n); });
 }
 
-size_t CountriesTable::size()
+size_t CountriesTable::get_rows()
 {
-    return this->countries.size();
+    return this->rows;
+}
+
+size_t CountriesTable::get_columns()
+{
+    return this->columns;
 }
 
 vector<Country> CountriesTable::get_countries()
@@ -27,10 +34,10 @@ vector<Country> CountriesTable::get_countries()
 vector<Country> CountriesTable::calculate_winners()
 {
     int points_table[10] = {12, 10, 8, 7, 6, 5, 4, 3, 2, 1};
-    for (size_t i = 0; i < this->size(); i++)
+    for (size_t i = 0; i < this->columns; i++)
     {
         this->sort_by_column(i);
-        for (size_t j = 0; j < (this->size() < 10 ? this->size() : 10); j++)
+        for (size_t j = 0; j < (this->rows < 10 ? this->rows : 10); j++)
         {
             this->countries[j].add_points(points_table[j]);
         }

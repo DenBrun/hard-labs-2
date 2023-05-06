@@ -39,3 +39,8 @@ int Country::get_points()
 {
     return this->points;
 }
+
+size_t Country::get_columns()
+{
+    return this->votes.size();
+}

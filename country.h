@@ -16,4 +16,5 @@ public:
     std::string get_name();
     std::string to_string();
     int get_points();
+    size_t get_columns();
 };
