@@ -1,6 +1,6 @@
 #include "CSVReader.h"
+#include "FileValidator.h"
 #include <fstream>
-#include <sstream>
 using namespace std;
 
 vector<string> CSVReader::splitString(string str, string delimiter)
@@ -42,37 +42,26 @@ vector<vector<string>> CSVReader::readCSV(filesystem::path path)
 {
     // Chain of resp FluentValidator
     // ValidationResult => vector<ValidationWarning>  vector<ValidationError>
-    ifstream file(path);
-    if (!file.is_open())
+    FileExistsValidator *exists = new FileExistsValidator;
+    NonEmptyFileValidator *not_empty = new NonEmptyFileValidator;
+    NumLinesValidator *num_lines = new NumLinesValidator;
+    exists->setNext(not_empty)->setNext(num_lines);
+
+    string validationResult = exists->validate(path);
+
+    if (!validationResult.empty())
     {
-        throw invalid_argument("Filename " + path.filename().string() + " not found.");
+        throw invalid_argument(validationResult);
     }
 
+    ifstream file(path);
     string line;
     getline(file, line);
-
-    if (line.length() == 0)
-    {
-        throw invalid_argument("File " + path.filename().string() + " does not contain any data.");
-    }
-
-    int numLines;
-    stringstream ss(line);
-
-    if (!(ss >> numLines && ss.eof()) || numLines == 0)
-    {
-        throw invalid_argument("Number of lines in " + path.filename().string() + " has a wrong fornat: " + line);
-    }
 
     vector<vector<string>> lines;
     while (getline(file, line))
     {
         lines.push_back(splitString(line, ","));
-    }
-    if (!file.eof() || lines.size() != numLines)
-    {
-        throw invalid_argument("File " + path.filename().string() + " has a wrong format. Number of lines (" +
-                               to_string(numLines) + ") doesn't match the real file length.");
     }
 
     file.close();
