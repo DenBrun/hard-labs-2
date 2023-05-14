@@ -10,10 +10,3 @@ protected:
 public:
     std::vector<std::vector<std::string>> readCSV(std::filesystem::path path);
 };
-
-class CountryCSVReader : public CSVReader
-{
-public:
-    std::vector<Country> readAndParseCountries(std::filesystem::path path);
-    CountriesTable readAndParseCountriesFromDirectory(std::string directory);
-};
