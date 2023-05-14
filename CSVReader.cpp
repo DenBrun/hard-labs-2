@@ -40,6 +40,8 @@ vector<filesystem::path> CSVReader::findFilesFromDirectory(string directory, str
 
 vector<vector<string>> CSVReader::readCSV(filesystem::path path)
 {
+    // Chain of resp FluentValidator
+    // ValidationResult => vector<ValidationWarning>  vector<ValidationError>
     ifstream file(path);
     if (!file.is_open())
     {
