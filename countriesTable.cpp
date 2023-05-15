@@ -34,7 +34,7 @@ vector<Country> CountriesTable::calculate_winners()
     }
     sort(this->countries.begin(), this->countries.end(), [](Country &c1, Country &c2)
          { return c1.get_points() > c2.get_points(); });
-    this->winners.insert(winners.begin(), this->countries.begin(), this->countries.begin() + 10);
+    this->winners.insert(winners.begin(), this->countries.begin(), this->countries.begin() + (rows < 10 ? rows : 10));
     return this->winners;
 }
 
